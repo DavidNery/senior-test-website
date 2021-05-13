@@ -5,7 +5,7 @@ import { Link, useHistory } from 'react-router-dom';
 import { Card, CardTitle } from '../../components/Card';
 import Input from '../../components/Input';
 import API from '../../services/api';
-import { RegisterContainer, UpWaves } from './style';
+import { MainContainer, UpWaves } from '../../style/CommonStyle';
 
 const Register: React.FC = () => {
 
@@ -14,9 +14,9 @@ const Register: React.FC = () => {
   const [success, setSuccess] = useState(false);
 
   const onSubmit = useCallback(data => {
-    API.post('/register', data).then(response => {
-      setSuccess(true);
-    }).catch((error: AxiosError) => {
+    setError(undefined);
+    API.post('/register', data).then(_ => setSuccess(true))
+    .catch((error: AxiosError) => {
       if (error.response?.data.error) {
         setError(error.response?.data.error);
       } else {
@@ -27,19 +27,9 @@ const Register: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    if (error) {
-      const timeout = setTimeout(() => {
-        setError(undefined);
-      }, 2000);
-
-      return () => clearTimeout(timeout);
-    }
-  }, [error]);
-
-  useEffect(() => {
     if (success) {
       const timeout = setTimeout(() => {
-        history.replace('/');
+        history.replace('/login');
       }, 2000);
 
       return () => clearTimeout(timeout);
@@ -47,7 +37,7 @@ const Register: React.FC = () => {
   }, [history, success]);
 
   return (
-    <RegisterContainer>
+    <MainContainer>
       <UpWaves />
       <Card>
         <CardTitle className='shaded-text'>Register</CardTitle>
@@ -113,7 +103,7 @@ const Register: React.FC = () => {
           </Form>
         </div>
       </Card>
-    </RegisterContainer>
+    </MainContainer>
   );
 }
 

@@ -14,13 +14,25 @@ function App() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      API.get('/me', {
-        headers: {
+    const interceptorID = API.interceptors.request.use(request => {
+      if (request.url?.indexOf('/me') === -1) return request;
+
+      const token = localStorage.getItem('token');
+      if (token) {
+        request.headers = {
+          ...request.headers,
           'Authorization': `Bearer ${token}`
         }
-      }).then(meResponse => {
+      }
+      return request;
+    });
+
+    return () => API.interceptors.request.eject(interceptorID);
+  }, []);
+
+  useEffect(() => {
+    if (localStorage.getItem('token')) {
+      API.get('/me').then(meResponse => {
         const { id, name, email } = meResponse.data;
         dispatch(UserActionBuilder.buildUpdateUser({ id, name, email }));
       }).catch(_ => dispatch(UserActionBuilder.buildLogout()));

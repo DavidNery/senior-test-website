@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Card, CardSubtitle, CardTitle } from '../../components/Card';
 import User from '../../interfaces/User';
 import UserActionBuilder from '../../stores/reducers/UserActionBuilder';
-import { MeContainer, UpWaves } from './style';
+import { MainContainer, UpWaves } from '../../style/CommonStyle';
 
 const Me: React.FC = () => {
 
@@ -13,7 +13,7 @@ const Me: React.FC = () => {
   const handleLogout = useCallback(() => dispatch(UserActionBuilder.buildLogout()), [dispatch]);
 
   return (
-    <MeContainer>
+    <MainContainer>
       <UpWaves />
       <Card>
         <CardTitle className='shaded-text'>Hello, {user.name}</CardTitle>
@@ -30,7 +30,7 @@ const Me: React.FC = () => {
           <button className="btn bg-red block" onClick={handleLogout}>Logout</button>
         </div>
       </Card>
-    </MeContainer>
+    </MainContainer>
   );
 }
 

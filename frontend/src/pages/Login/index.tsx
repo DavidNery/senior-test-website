@@ -1,15 +1,18 @@
 import { Form } from '@unform/web';
 import { AxiosError } from 'axios';
 import React, { useCallback, useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { Link, useHistory } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link, Redirect, useHistory } from 'react-router-dom';
 import { Card, CardTitle } from '../../components/Card';
 import Input from '../../components/Input';
+import User from '../../interfaces/User';
 import API from '../../services/api';
 import UserActionBuilder from '../../stores/reducers/UserActionBuilder';
-import { LoginContainer, UpWaves } from './style';
+import { MainContainer, UpWaves } from '../../style/CommonStyle';
 
 const Login: React.FC = () => {
+
+  const user = useSelector<any, User>(store => store?.user);
   const history = useHistory();
   const [error, setError] = useState<string | undefined>();
   const [success, setSuccess] = useState(false);
@@ -17,15 +20,12 @@ const Login: React.FC = () => {
   const dispatch = useDispatch();
 
   const onSubmit = useCallback(data => {
+    setError(undefined);
     API.post('/login', data).then(response => {
       const token = response.data.access_token;
       localStorage.setItem('token', token);
       
-      API.get('/me', {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      }).then(meResponse => {
+      API.get('/me').then(meResponse => {
         const { id, name, email } = meResponse.data;
         dispatch(UserActionBuilder.buildUpdateUser({ id, name, email }));
       });
@@ -41,16 +41,6 @@ const Login: React.FC = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    if (error) {
-      const timeout = setTimeout(() => {
-        setError(undefined);
-      }, 2000);
-
-      return () => clearTimeout(timeout);
-    }
-  }, [error]);
-
-  useEffect(() => {
     if (success) {
       const timeout = setTimeout(() => {
         history.replace('/');
@@ -60,8 +50,10 @@ const Login: React.FC = () => {
     }
   }, [history, success]);
 
+  if(user) return <Redirect to='/me'/>;
+
   return (
-    <LoginContainer>
+    <MainContainer>
       <UpWaves />
       <Card style={{ minWidth: '30%' }}>
         <CardTitle className='shaded-text'>Login</CardTitle>
@@ -105,7 +97,7 @@ const Login: React.FC = () => {
           </Form>
         </div>
       </Card>
-    </LoginContainer>
+    </MainContainer>
   );
 }
 

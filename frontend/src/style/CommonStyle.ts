@@ -1,15 +1,15 @@
-import styled from "styled-components";
-import Wave from '../../resources/wave.svg';
-import Wave2 from '../../resources/wave_2.svg';
+import styled from 'styled-components';
+import Wave from '../resources/wave.svg';
+import Wave2 from '../resources/wave_2.svg';
 
-export const RegisterContainer = styled.main`
+export const MainContainer = styled.main`
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
 
   padding: 2rem 10%;
-
+  
   width: 100vw;
   min-height: 100vh;
   overflow-x: hidden;

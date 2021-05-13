@@ -9,5 +9,11 @@ This is the frontend of the project.
 4. Configure the backend url
 5. Run the project with `npm run start` or `yarn start`
 
+# Technologies
+I used these technologies in the project:
+- [X] React
+- [X] Typescript
+- [X] Redux
+
 # Screenshots
 All screenshots can be found on the folder [.github](./.github)

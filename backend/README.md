@@ -10,3 +10,8 @@ This is the backend of the project.
 5. Run the migrations with `php artisan migrate`
 6. Generate an app key with `php artisan key:generate`
 7. Run the project with `php artisan serve`
+
+# Technologies
+I used these technologies in the project:
+- [X] PHP
+- [X] Laravel 8
